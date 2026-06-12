@@ -1,27 +1,78 @@
-export const channels = [
-  "general",
-  "development",
-  "design",
-  "marketing",
+import type {
+  Channel,
+  Message,
+} from "../types/workspace";
+export const channels: Channel[] = [
+  {
+    id: "general",
+    name: "general",
+  },
+  {
+    id: "development",
+    name: "development",
+  },
+  {
+    id: "design",
+    name: "design",
+  },
+  {
+    id: "marketing",
+    name: "marketing",
+  },
 ];
 export const channelMessages: Record<
   string,
-  string[]
+  Message[]
 > = {
   general: [
-    "Welcome to the general channel.",
-    "Team announcements will appear here.",
+    {
+      id: "g1",
+      content:
+        "Welcome to the general channel.",
+    },
+    {
+      id: "g2",
+      content:
+        "Team announcements will appear here.",
+    },
   ],
+
   development: [
-    "Development sprint starts Monday.",
-    "Code reviews are pending.",
+    {
+      id: "d1",
+      content:
+        "Development sprint starts Monday.",
+    },
+    {
+      id: "d2",
+      content:
+        "Code reviews are pending.",
+    },
   ],
+
   design: [
-    "New design system draft uploaded.",
-    "Review the dashboard mockups.",
+    {
+      id: "de1",
+      content:
+        "New design system draft uploaded.",
+    },
+    {
+      id: "de2",
+      content:
+        "Review the dashboard mockups.",
+    },
   ],
+
   marketing: [
-    "Campaign planning meeting tomorrow.",
-    "Social media content ready.",
+    {
+      id: "m1",
+      content:
+        "Campaign planning meeting tomorrow.",
+    },
+    {
+      id: "m2",
+      content:
+        "Social media content ready.",
+    },
   ],
 };

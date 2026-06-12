@@ -23,17 +23,17 @@ const WorkspaceSidebar = ({
       <ul className="space-y-2">
         {channels.map((channel) => (
           <li
-            key={channel}
+            key={channel.id}
             onClick={() =>
-              setSelectedChannel(channel)
+              setSelectedChannel(channel.id)
             }
             className={`cursor-pointer rounded px-2 py-1 ${
-              selectedChannel === channel
+              selectedChannel === channel.id
                 ? "bg-gray-200 font-semibold"
                 : "hover:bg-gray-100"
             }`}
           >
-            # {channel}
+            # {channel.name}
           </li>
         ))}
       </ul>

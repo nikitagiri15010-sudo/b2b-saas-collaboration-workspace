@@ -1,5 +1,7 @@
+import type { Message } from "../../types/workspace";
+
 type MessageListProps = {
-  messages: string[];
+  messages: Message[];
 };
 
 const MessageList = ({
@@ -7,12 +9,12 @@ const MessageList = ({
 }: MessageListProps) => {
   return (
     <div className="space-y-3">
-      {messages.map((message, index) => (
+      {messages.map((message) => (
         <div
-          key={index}
+          key={message.id}
           className="rounded border p-3"
         >
-          {message}
+          {message.content}
         </div>
       ))}
     </div>

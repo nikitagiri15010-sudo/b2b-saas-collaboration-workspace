@@ -1,3 +1,4 @@
+import type { Message } from "../../types/workspace";
 import { useState } from "react";
 import { useEffect } from "react";
 import MessageList from "./MessageList";
@@ -13,7 +14,7 @@ const WorkspaceMain = ({
 }: WorkspaceMainProps) => {
   
 
-    const [messages, setMessages] = useState(
+ const [messages, setMessages] = useState<Message[]>(
   channelMessages[selectedChannel] || []
 );
 
@@ -29,10 +30,13 @@ const [newMessage, setNewMessage] =
   const handleSendMessage = () => {
   if (!newMessage.trim()) return;
 
-  setMessages([
-    ...messages,
-    newMessage,
-  ]);
+ setMessages([
+  ...messages,
+  {
+    id: Date.now().toString(),
+    content: newMessage,
+  },
+]);
 
   setNewMessage("");
 };
