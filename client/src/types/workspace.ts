@@ -6,4 +6,6 @@ export type Channel = {
 export type Message = {
   id: string;
   content: string;
+  author: string;
+  timestamp: string;
 };

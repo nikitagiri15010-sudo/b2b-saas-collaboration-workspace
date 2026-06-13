@@ -30,11 +30,16 @@ const [newMessage, setNewMessage] =
   const handleSendMessage = () => {
   if (!newMessage.trim()) return;
 
- setMessages([
+setMessages([
   ...messages,
   {
     id: Date.now().toString(),
     content: newMessage,
+    author: "You",
+    timestamp: new Date().toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    }),
   },
 ]);
 
