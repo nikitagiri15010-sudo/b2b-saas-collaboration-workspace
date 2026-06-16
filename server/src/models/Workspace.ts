@@ -21,13 +21,29 @@ const workspaceSchema =
       },
 
       description: {
-  type: String,
-  default: "",
-},
-owner: {
-  type: Schema.Types.ObjectId,
-  ref: "User",
-  required: true,
-},
+        type: String,
+        default: "",
+      },
+
+      owner: {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+      },
+
+      members: [
+        {
+          type: Schema.Types.ObjectId,
+          ref: "User",
+        },
+      ],
+    },
+    {
+      timestamps: true,
     }
   );
+  const Workspace = mongoose.model<IWorkspace>(
+  "Workspace",
+  workspaceSchema
+);
+export default Workspace;
