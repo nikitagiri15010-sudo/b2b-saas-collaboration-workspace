@@ -19,6 +19,11 @@ export const protect = async (
   const authHeader =
   _req.headers.authorization;
 
+  console.log(
+  "Authorization Header:",
+  authHeader
+);
+
 if (!authHeader) {
   return _res.status(401).json({
     success: false,
@@ -28,6 +33,11 @@ if (!authHeader) {
 
 const token =
   authHeader.split(" ")[1];
+
+  console.log(
+  "Extracted Token:",
+  token
+);
 
   try {
   const decoded = jwt.verify(
@@ -48,6 +58,10 @@ if (!user) {
   });
 }
 _req.user = user;
+console.log(
+  "User Attached:",
+  user._id
+);
 console.log(
   "Request User:",
   _req.user.email
