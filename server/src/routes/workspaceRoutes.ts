@@ -2,6 +2,9 @@ import { Router } from "express";
 
 import {
   createWorkspace,
+  getWorkspaces,
+  getWorkspaceById,
+  updateWorkspace,
 } from "../controllers/workspaceController";
 import { protect }
 from "../middleware/authMiddleware";
@@ -12,6 +15,21 @@ router.post(
   "/",
   protect,
   createWorkspace
+);
+router.get(
+  "/",
+  protect,
+  getWorkspaces
+);
+router.get(
+  "/:id",
+  protect,
+  getWorkspaceById
+);
+router.put(
+  "/:id",
+  protect,
+  updateWorkspace
 );
 
 export default router;  
