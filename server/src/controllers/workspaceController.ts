@@ -141,6 +141,27 @@ export const updateWorkspace =
         description,
       } = req.body;
 
+      if (
+  typeof name !== "string"
+) {
+  return res.status(400).json({
+    success: false,
+    message:
+      "Workspace name must be a string",
+  });
+}
+
+      if (
+  !name ||
+  name.trim() === ""
+) {
+  return res.status(400).json({
+    success: false,
+    message:
+      "Workspace name is required",
+  });
+}
+
       const workspace =
         await Workspace.findById(id);
 
@@ -165,9 +186,8 @@ export const updateWorkspace =
         });
       }
 
-      workspace.name = name;
-      workspace.description =
-        description;
+      workspace.name = name.trim();
+     workspace.description = description?.trim();
 
       await workspace.save();
 
@@ -182,6 +202,56 @@ export const updateWorkspace =
         success: false,
         message:
           "Failed to update workspace",
+      });
+    }
+  };
+
+export const deleteWorkspace =
+  async (
+    req: AuthRequest,
+    res: Response
+  ) => {
+    try {
+      const { id } = req.params;
+
+      const workspace =
+        await Workspace.findById(id);
+
+      if (!workspace) {
+        return res.status(404).json({
+          success: false,
+          message:
+            "Workspace not found",
+        });
+      }
+
+      const user = req.user;
+
+      if (
+        workspace.owner.toString() !==
+        user?._id.toString()
+      ) {
+        return res.status(403).json({
+          success: false,
+          message:
+            "Only the workspace owner can delete the workspace",
+        });
+      }
+
+      await Workspace.findByIdAndDelete(
+        id
+      );
+
+      return res.status(200).json({
+        success: true,
+        message:
+          "Workspace deleted successfully",
+      });
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message:
+          "Failed to delete workspace",
       });
     }
   };

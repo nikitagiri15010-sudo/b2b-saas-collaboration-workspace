@@ -5,6 +5,7 @@ import {
   getWorkspaces,
   getWorkspaceById,
   updateWorkspace,
+  deleteWorkspace,
 } from "../controllers/workspaceController";
 import { protect }
 from "../middleware/authMiddleware";
@@ -30,6 +31,11 @@ router.put(
   "/:id",
   protect,
   updateWorkspace
+);
+router.delete(
+  "/:id",
+  protect,
+  deleteWorkspace
 );
 
 export default router;  
