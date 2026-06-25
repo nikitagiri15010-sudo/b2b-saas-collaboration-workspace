@@ -3,6 +3,7 @@ import Message from "../models/Message";
 import Channel from "../models/Channel";
 import { AuthRequest } from "../middleware/authMiddleware";
 import { Request, Response } from "express";
+import { getIO } from "../socket/io";
 
 export const createMessage = async (
   req: AuthRequest,
@@ -51,10 +52,22 @@ export const createMessage = async (
       sender: req.user?._id,
     });
 
+    const populatedMessage =
+  await Message.findById(message._id)
+    .populate(
+      "sender",
+      "name email"
+    );
+    const io = getIO();
+    io.to(channelId).emit(
+  "new-message",
+  populatedMessage
+);
+
    return res.status(201).json({
   success: true,
   message: "Message created successfully",
-  data: message,
+  data: populatedMessage,
 });
 
   } catch (error) {
@@ -172,15 +185,28 @@ export const updateMessage = async (
       });
     }
 
-    message.content =
-      trimmedContent;
+    message.content = trimmedContent;
 
     await message.save();
+
+    const updatedMessage =
+  await Message.findById(message._id)
+    .populate(
+      "sender",
+      "name email"
+    );
+
+    const io = getIO();
+
+    io.to(message.channel.toString()).emit(
+  "message-updated",
+  updatedMessage
+);
 
     return res.status(200).json({
       success: true,
       message: "Message updated successsfully",
-      data: message,
+      data:  updatedMessage,
     });
   } catch (error) {
     return res.status(500).json({

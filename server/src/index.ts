@@ -6,9 +6,14 @@ import authRoutes from "./routes/authRoutes";
 import workspaceRoutes from "./routes/workspaceRoutes";
 import channelRoutes from "./routes/channelRoutes";
 import messageRoutes from "./routes/messageRoutes";
+import http from "http";
+import { Server } from "socket.io";
+import { initializeSocket } from "./socket/socketServer";
+import { setIO } from "./socket/io";
 dotenv.config();
-
 const app = express();
+const server = http.createServer(app);
+
 app.use(cors());
 app.use(express.json());
 app.use("/api/auth", authRoutes);
@@ -29,9 +34,21 @@ app.get("/api/health", (_req, res) => {
   });
 });
 
-app.listen(PORT, () => {
+const io = new Server(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"],
+  },
+});
+
+setIO(io);
+initializeSocket(io);
+
+server.listen(PORT, () => {
   console.log(
     `Server running on port ${PORT}`
   );
 });
+
+
 
