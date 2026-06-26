@@ -257,6 +257,16 @@ export const deleteMessage = async (
 
     await message.deleteOne();
 
+    const io = getIO();
+    
+    io.to(message.channel.toString()).emit(
+  "message-deleted",
+  {
+    messageId: message._id,
+    channel: message.channel,
+  }
+);
+
     return res.status(200).json({
       success: true,
       message:
