@@ -1,11 +1,13 @@
+import { Navigate } from "react-router-dom";
+
 function HomePage() {
-  return (
-    <div className="min-h-screen flex items-center justify-center">
-      <h1 className="text-4xl font-bold">
-        Welcome to B2B SaaS Collaboration Workspace
-      </h1>
-    </div>
-  );
+  const token = localStorage.getItem("token");
+
+  if (token) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  return <Navigate to="/login" replace />;
 }
 
 export default HomePage;
