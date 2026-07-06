@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
+
 import WorkspaceSidebar from "../components/workspace/WorkspaceSidebar";
 import WorkspaceMain from "../components/workspace/WorkspaceMain";
+
 import { useWorkspaces } from "../hooks/useWorkspaces";
+import { useChannels } from "../hooks/useChannels";
 
 const WorkspacePage = () => {
-  const [selectedChannel, setSelectedChannel] =
-    useState("general");
-
   const [selectedWorkspaceId, setSelectedWorkspaceId] =
+    useState("");
+
+  const [selectedChannel, setSelectedChannel] =
     useState("");
 
   const {
@@ -26,8 +29,25 @@ const WorkspacePage = () => {
     }
   }, [workspaces, selectedWorkspaceId]);
 
+  const { data: channels } =
+    useChannels(selectedWorkspaceId);
+
+  useEffect(() => {
+    if (
+      channels &&
+      channels.length > 0 &&
+      !selectedChannel
+    ) {
+      setSelectedChannel(channels[0]._id);
+    }
+  }, [channels, selectedChannel]);
+
   if (isLoading) {
-    return <p className="p-4">Loading workspaces...</p>;
+    return (
+      <p className="p-4">
+        Loading workspaces...
+      </p>
+    );
   }
 
   if (isError) {
@@ -39,7 +59,11 @@ const WorkspacePage = () => {
   }
 
   if (!selectedWorkspaceId) {
-    return <p className="p-4">No workspaces found.</p>;
+    return (
+      <p className="p-4">
+        No workspaces found.
+      </p>
+    );
   }
 
   return (

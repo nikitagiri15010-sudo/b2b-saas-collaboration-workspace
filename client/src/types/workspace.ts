@@ -1,92 +1,55 @@
-import {
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from "@tanstack/react-query";
+export interface Workspace {
+  _id: string;
+  name: string;
+  description?: string;
+  owner: string;
+  members: string[];
+  createdAt?: string;
+  updatedAt?: string;
+}
 
-import {
-  createWorkspace,
-  deleteWorkspace,
-  getWorkspaces,
-  updateWorkspace,
-} from "../services/workspaceApi";
+export interface Channel {
+  id: string;
+  name: string;
+}
 
-export const useWorkspaces =
-  () => {
-    return useQuery({
-      queryKey: [
-        "workspaces",
-      ],
-      queryFn:
-        getWorkspaces,
-    });
-  };
+export interface User {
+  _id: string;
+  name: string;
+  email: string;
+}
 
-export const useCreateWorkspace =
-  () => {
-    const queryClient =
-      useQueryClient();
+export interface Message {
+  _id: string;
+  content: string;
+  channel: string;
+  sender: User;
+  createdAt: string;
+  updatedAt: string;
+}
 
-    return useMutation({
-      mutationFn:
-        createWorkspace,
+/*
+|--------------------------------------------------------------------------
+| Temporary Mock Types
+|--------------------------------------------------------------------------
+| These are kept temporarily so the current WorkspaceMain,
+| MessageList and workspaceData continue working until we
+| migrate them to the backend Message model.
+|--------------------------------------------------------------------------
+*/
 
-      onSuccess: () => {
-        queryClient.invalidateQueries(
-          {
-            queryKey: [
-              "workspaces",
-            ],
-          }
-        );
-      },
-    });
-  };
+export interface MockMessage {
+  id: string;
+  content: string;
+  author: string;
+  timestamp: string;
+}
 
-export const useUpdateWorkspace =
-  () => {
-    const queryClient =
-      useQueryClient();
+export interface CreateMessageData {
+  content: string;
+  channelId: string;
+}
 
-    return useMutation({
-      mutationFn: ({
-        workspaceId,
-        workspace,
-      }: any) =>
-        updateWorkspace(
-          workspaceId,
-          workspace
-        ),
-
-      onSuccess: () => {
-        queryClient.invalidateQueries(
-          {
-            queryKey: [
-              "workspaces",
-            ],
-          }
-        );
-      },
-    });
-  };
-
-export const useDeleteWorkspace =
-  () => {
-    const queryClient =
-      useQueryClient();
-
-    return useMutation({
-      mutationFn:
-        deleteWorkspace,
-
-      onSuccess: () => {
-        queryClient.invalidateQueries(
-          {
-            queryKey: [
-              "workspaces",
-            ],
-          }
-        );
-      },
-    });
-  };
+export interface UpdateMessageData {
+  content: string;
+}

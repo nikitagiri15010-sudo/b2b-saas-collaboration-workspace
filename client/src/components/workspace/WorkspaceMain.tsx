@@ -1,10 +1,14 @@
-import type { Message } from "../../types/workspace";
 import { useState } from "react";
-import { useEffect } from "react";
-import MessageList from "./MessageList";
-import { channelMessages } from "../../data/workspaceData";
-import MessageInput from "./MessageInput";
+
 import WorkspaceHeader from "./WorkspaceHeader";
+import MessageInput from "./MessageInput";
+import MessageList from "./MessageList";
+
+import {
+  useCreateMessage,
+  useMessages,
+} from "../../hooks/useMessages";
+
 type WorkspaceMainProps = {
   selectedChannel: string;
 };
@@ -12,56 +16,78 @@ type WorkspaceMainProps = {
 const WorkspaceMain = ({
   selectedChannel,
 }: WorkspaceMainProps) => {
-  
+  const [newMessage, setNewMessage] =
+    useState("");
 
- const [messages, setMessages] = useState<Message[]>(
-  channelMessages[selectedChannel] || []
-);
+  const {
+    data: messages = [],
+    isLoading,
+    isError,
+  } = useMessages(selectedChannel);
 
-useEffect(() => {
-  setMessages(
-    channelMessages[selectedChannel] || []
-  );
-}, [selectedChannel]);
-
-const [newMessage, setNewMessage] =
-  useState("");
+  const createMessageMutation =
+    useCreateMessage();
 
   const handleSendMessage = () => {
-  if (!newMessage.trim()) return;
+    const trimmedMessage =
+      newMessage.trim();
 
-setMessages([
-  ...messages,
-  {
-    id: Date.now().toString(),
-    content: newMessage,
-    author: "You",
-    timestamp: new Date().toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit",
-    }),
-  },
-]);
+    if (!trimmedMessage) return;
 
-  setNewMessage("");
-};
+    createMessageMutation.mutate(
+      {
+        content: trimmedMessage,
+        channelId: selectedChannel,
+      },
+      {
+        onSuccess: () => {
+          setNewMessage("");
+        },
+      }
+    );
+  };
 
   return (
     <main className="flex-1 p-6">
-     <WorkspaceHeader
-  selectedChannel={selectedChannel}
-/>
-          
-    <div className="mb-6 flex gap-2">
+      <WorkspaceHeader
+        selectedChannel={selectedChannel}
+      />
 
-<MessageInput
-  newMessage={newMessage}
-  setNewMessage={setNewMessage}
-  handleSendMessage={handleSendMessage}
-/>
+      <div className="mb-6 flex gap-2">
+        <MessageInput
+          newMessage={newMessage}
+          setNewMessage={setNewMessage}
+          handleSendMessage={
+            handleSendMessage
+          }
+        />
+      </div>
 
-</div>
-<MessageList messages={messages} />
+      {isLoading && (
+        <p>Loading messages...</p>
+      )}
+
+      {isError && (
+        <p className="text-red-500">
+          Failed to load messages.
+        </p>
+      )}
+
+      {!isLoading &&
+        !isError &&
+        messages.length === 0 && (
+          <p className="text-gray-500">
+            No messages yet.
+          </p>
+        )}
+
+      {!isLoading &&
+        !isError &&
+        messages.length > 0 && (
+          <MessageList
+            messages={messages}
+          />
+        )}
     </main>
   );
 };
