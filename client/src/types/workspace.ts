@@ -9,8 +9,11 @@ export interface Workspace {
 }
 
 export interface Channel {
-  id: string;
+  _id: string;
   name: string;
+  workspace?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface User {
@@ -26,23 +29,6 @@ export interface Message {
   sender: User;
   createdAt: string;
   updatedAt: string;
-}
-
-/*
-|--------------------------------------------------------------------------
-| Temporary Mock Types
-|--------------------------------------------------------------------------
-| These are kept temporarily so the current WorkspaceMain,
-| MessageList and workspaceData continue working until we
-| migrate them to the backend Message model.
-|--------------------------------------------------------------------------
-*/
-
-export interface MockMessage {
-  id: string;
-  content: string;
-  author: string;
-  timestamp: string;
 }
 
 export interface CreateMessageData {
