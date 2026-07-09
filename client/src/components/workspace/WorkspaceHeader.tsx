@@ -1,13 +1,13 @@
 type WorkspaceHeaderProps = {
-  selectedChannel: string;
+  channelName: string;
 };
 
 const WorkspaceHeader = ({
-  selectedChannel,
+  channelName,
 }: WorkspaceHeaderProps) => {
   return (
     <h1 className="mb-6 text-3xl font-bold">
-      #{selectedChannel}
+      #{channelName}
     </h1>
   );
 };

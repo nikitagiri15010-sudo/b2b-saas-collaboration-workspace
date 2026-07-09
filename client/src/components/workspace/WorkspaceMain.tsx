@@ -11,10 +11,12 @@ import {
 
 type WorkspaceMainProps = {
   selectedChannel: string;
+  channelName: string;
 };
 
 const WorkspaceMain = ({
   selectedChannel,
+  channelName,
 }: WorkspaceMainProps) => {
   const [newMessage, setNewMessage] =
     useState("");
@@ -50,7 +52,7 @@ const WorkspaceMain = ({
   return (
     <main className="flex-1 p-6">
       <WorkspaceHeader
-        selectedChannel={selectedChannel}
+        channelName={channelName}
       />
 
       <div className="mb-6 flex gap-2">

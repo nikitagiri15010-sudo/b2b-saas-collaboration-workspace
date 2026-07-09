@@ -29,18 +29,23 @@ const WorkspacePage = () => {
     }
   }, [workspaces, selectedWorkspaceId]);
 
-  const { data: channels } =
+  const { data: channels = [] } =
     useChannels(selectedWorkspaceId);
 
   useEffect(() => {
     if (
-      channels &&
       channels.length > 0 &&
       !selectedChannel
     ) {
       setSelectedChannel(channels[0]._id);
     }
   }, [channels, selectedChannel]);
+
+  const selectedChannelData =
+    channels.find(
+      (channel) =>
+        channel._id === selectedChannel
+    );
 
   if (isLoading) {
     return (
@@ -76,6 +81,9 @@ const WorkspacePage = () => {
 
       <WorkspaceMain
         selectedChannel={selectedChannel}
+        channelName={
+          selectedChannelData?.name ?? ""
+        }
       />
     </div>
   );
